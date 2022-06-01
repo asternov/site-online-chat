@@ -1,7 +1,17 @@
+
 .widget {
     position: fixed;
-    width: 33%;
-    height: 50%;
     right: 10px;
-    bottom: 10px
+    bottom: 20px
+}
+
+.widget.open {
+    height: 50%;
+    width: 33%;
+}
+
+.widget.close {
+    overflow: hidden;
+    width: 90px;
+    height: 30px;
 }
