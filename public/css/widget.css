@@ -1,0 +1,7 @@
+.widget {
+    position: fixed;
+    width: 33%;
+    height: 50%;
+    right: 10px;
+    bottom: 10px
+}

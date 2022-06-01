@@ -13,22 +13,18 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 use App\Models\Message;
 
-class MessageSent implements ShouldBroadcast
+class MessageDelete implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $user;
-    public $message;
+    public $id;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Author $user, Message $message)
+    public function __construct(int $id)
     {
-        $this->user = $user;
-        $this->message = $message;
+        $this->id = $id;
     }
 
     /**

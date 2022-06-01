@@ -1,8 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.modal')
 
 
 @section('content')
-    <div class="container">
+
+
+    <button style="left: 0" class="btn btn-success btn-sm  w-100 h-100 top-0 " id="open" @click="close" v-if="closed">
+        Chat
+    </button>
+    <div class="container p-0  overflow-scroll h-100" v-else>
+        <button style="z-index: 999; top: 10px; right: 16px" class="btn btn-success btn-sm position-absolute" id="close" @click="close">
+            >
+        </button>
         <div class="card">
             <div class="card-header">
                 <chat-form v-on:messagesent="addMessage" ></chat-form>

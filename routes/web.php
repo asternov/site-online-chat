@@ -13,10 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\ChatsController::class, 'index']);
-Route::get('/chat', [App\Http\Controllers\ChatsController::class, 'index']);
-Route::get('/messages', [App\Http\Controllers\ChatsController::class, 'fetchMessages']);
-Route::post('/messages', [App\Http\Controllers\ChatsController::class, 'sendMessage']);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/chat', [App\Http\Controllers\MessagesController::class, 'index']);
+});
+
+Route::get('/', function () {
+    return redirect(route('login'));
+});
+
+Route::get('/chat', [App\Http\Controllers\MessagesController::class, 'index']);
+Route::get('/widget', [App\Http\Controllers\MessagesController::class, 'widget']);
+Route::get('/messages', [App\Http\Controllers\MessagesController::class, 'fetchMessages']);
+Route::post('/messages', [App\Http\Controllers\MessagesController::class, 'sendMessage']);
+Route::delete('/messages/{message}', [App\Http\Controllers\MessagesController::class, 'destroy']);
 
 Auth::routes();
 
