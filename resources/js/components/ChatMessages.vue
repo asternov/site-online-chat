@@ -5,8 +5,8 @@
                     <strong>
                         {{ message.author.name }}:
                     </strong>
-                    <button v-if="admin" class="btn btn-primary btn-sm" id="btn-chat" @click="deleteMessage(message.id)">
-                        Delete Message
+                    <button v-if="admin" class="btn btn-danger btn-sm" id="btn-chat" @click="deleteMessage(message.id)">
+                        X
                     </button>
                 </div>
                 <p class="bg-secondary rounded d-inline-block p-1 bg-opacity-50 mb-1">
