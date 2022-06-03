@@ -34698,7 +34698,7 @@ var render = function () {
     "div",
     {
       staticClass: "chat overflow-scroll",
-      staticStyle: { "overflow-x": "hidden" },
+      staticStyle: { "overflow-x": "hidden", height: "75vh" },
     },
     _vm._l(_vm.messages.slice().reverse(), function (message) {
       return _c("div", { key: message.id, staticClass: "left clearfix" }, [

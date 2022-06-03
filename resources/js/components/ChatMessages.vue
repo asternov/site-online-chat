@@ -1,5 +1,5 @@
 <template>
-    <div class="chat overflow-scroll" style="overflow-x: hidden">
+    <div class="chat overflow-scroll" style="overflow-x: hidden; height: 75vh">
         <div class="left clearfix" v-for="message in messages.slice().reverse()" :key="message.id">
                 <div>
                     <strong>
