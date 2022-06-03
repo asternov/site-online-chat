@@ -19,7 +19,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body style="overflow-x: hidden">
+<body style="overflow: hidden">
     <div id="app">
         <main>
             @yield('content')
