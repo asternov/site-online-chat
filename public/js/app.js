@@ -34712,7 +34712,7 @@ var render = function () {
             ? _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary btn-sm",
+                  staticClass: "btn btn-danger btn-sm",
                   attrs: { id: "btn-chat" },
                   on: {
                     click: function ($event) {
@@ -34720,11 +34720,7 @@ var render = function () {
                     },
                   },
                 },
-                [
-                  _vm._v(
-                    "\n                    Delete Message\n                "
-                  ),
-                ]
+                [_vm._v("\n                    X\n                ")]
               )
             : _vm._e(),
         ]),
