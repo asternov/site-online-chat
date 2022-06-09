@@ -5396,15 +5396,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       newMessage: "",
-      name: ""
+      name: "",
+      timestamp: 0,
+      msgCount: 0,
+      showAlert: false
     };
+  },
+  computed: {
+    canSend: function canSend() {
+      if (!this.name.length) {
+        return false;
+      } else if (!this.newMessage.length) {
+        return false;
+      } else if (this.showAlert) {
+        return false;
+      }
+
+      return true;
+    }
   },
   methods: {
     sendMessage: function sendMessage() {
+      var _this = this;
+
+      var newTimestamp = Date.now() / 10000 | 0;
+
+      if (newTimestamp == this.timestamp) {
+        if (this.msgCount >= 1) {
+          this.timestamp = newTimestamp + 1;
+          this.showAlert = true;
+          var pause = (newTimestamp + 2) * 10000 - Date.now();
+          setTimeout(function () {
+            _this.showAlert = false;
+            _this.msgCount = 0;
+          }, pause);
+          return null;
+        }
+
+        this.msgCount++;
+      }
+
+      this.timestamp = newTimestamp;
       this.$emit("messagesent", {
         sender: this.name,
         author: {
@@ -34626,11 +34663,14 @@ var render = function () {
           "button",
           {
             staticClass: "btn btn-primary btn-sm",
-            attrs: { id: "btn-chat" },
+            attrs: { id: "btn-chat", disabled: !_vm.canSend },
             on: { click: _vm.sendMessage },
           },
           [_vm._v("\n    Send\n  ")]
         ),
+        _vm.showAlert
+          ? _c("span", { staticClass: "text-danger" }, [_vm._v("wait... ")])
+          : _vm._e(),
       ]),
       _vm._v(" "),
       _c("input", {
