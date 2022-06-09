@@ -41,9 +41,9 @@ export default {
     },
     computed: {
         canSend() {
-            if (!this.name.length()) {
+            if (!this.name.length) {
                 return false;
-            } else if (!this.newMessage.length()) {
+            } else if (!this.newMessage.length) {
                 return false;
             } else if (this.showAlert) {
                 return false;
@@ -57,7 +57,7 @@ export default {
             var newTimestamp = Date.now() / 10000 | 0;
 
             if (newTimestamp == this.timestamp) {
-                if (this.msgCount >= 2) {
+                if (this.msgCount >= 1) {
                     this.timestamp = newTimestamp + 1
                     this.showAlert = true;
                     var pause = (newTimestamp + 2) * 10000 - Date.now()
