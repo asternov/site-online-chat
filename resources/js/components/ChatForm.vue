@@ -54,6 +54,10 @@ export default {
     },
     methods: {
         sendMessage() {
+            if (!this.canSend) {
+                return null;
+            }
+
             var newTimestamp = Date.now() / 10000 | 0;
 
             if (newTimestamp == this.timestamp) {

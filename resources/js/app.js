@@ -43,6 +43,9 @@ const app = new Vue({
                     message: e.message.message,
                     author: e.user
                 });
+            })
+            .listen('MessageSent', (e) => {
+                this.cleanMessages(e);
             });
     },
     methods: {
@@ -57,7 +60,7 @@ const app = new Vue({
                 console.log(response.data);
             });
         },
-        deleteMessage(message) {
+        cleanMessages(message) {
             function clean(id) {
                 return function(element) {
                     return id != element.id;
@@ -65,6 +68,9 @@ const app = new Vue({
             }
 
             this.messages = this.messages.filter(clean(message.id));
+        },
+        deleteMessage(message) {
+            this.cleanMessages(message)
             axios.delete('/messages/' + message.id).then(response => {
                 console.log(response.data);
             });
