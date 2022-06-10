@@ -37,11 +37,11 @@ const app = new Vue({
     created() {
         this.fetchMessages();
 
-        window.Echo.private('chat')
+        window.Echo.channel('chat')
             .listen('MessageSent', (e) => {
                 this.messages.push({
                     message: e.message.message,
-                    user: e.user
+                    author: e.user
                 });
             });
     },
