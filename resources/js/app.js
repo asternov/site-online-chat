@@ -44,7 +44,7 @@ const app = new Vue({
                     author: e.user
                 });
             })
-            .listen('MessageSent', (e) => {
+            .listen('MessageDelete', (e) => {
                 this.cleanMessages(e);
             });
     },
