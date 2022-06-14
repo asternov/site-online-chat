@@ -13,7 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/register',
+        '/login',
         '/messages',
-        'http://chat.ru',
     ];
 }
