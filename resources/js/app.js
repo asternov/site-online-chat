@@ -28,6 +28,8 @@ Vue.component('chat-form', require('./components/ChatForm.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import 'fa-icons';
+
 const app = new Vue({
     el: '#app',
     data: {
