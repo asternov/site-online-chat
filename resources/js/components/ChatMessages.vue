@@ -6,10 +6,7 @@
                         {{ message.author.name }}:
                     </strong>
                     <button v-if="admin" class="btn btn-danger btn-sm" id="btn-chat" @click="deleteMessage(message.id)">
-                        <i class="fa-solid fa-trash-can"></i>
-                        <fa-icon class="fas fa-address-card" color="#2980B9" size="2em"></fa-icon>
-
-                        <fa-icon [icon]="faAlignJustify"></fa-icon>
+                        <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                 </div>
                 <p class="d-inline-block text-white">
