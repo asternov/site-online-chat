@@ -1,17 +1,27 @@
-
 .widget {
     position: fixed;
     right: 10px;
-    bottom: 20px
+    bottom: 20px;
+    z-index: 999;
+    opacity: 1;
 }
 
 .widget.open {
-    height: 50%;
-    width: 33%;
+    height: 86%;
+    width: 25%;
 }
 
-.widget.close {
+.widget.hidden {
     overflow: hidden;
     width: 90px;
     height: 30px;
+}
+
+.widget.expanded {
+    height: 86%;
+    width: 30%;
+}
+
+.widget.closed {
+    display: none;
 }

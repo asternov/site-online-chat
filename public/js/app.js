@@ -5500,6 +5500,12 @@ __webpack_require__.r(__webpack_exports__);
         id: id
       });
     }
+  },
+  mounted: function mounted() {
+    window.setTimeout(function () {
+      var elem = document.getElementById('scroll');
+      elem.scrollTop = elem.scrollHeight;
+    }, 100);
   }
 });
 
@@ -5545,7 +5551,7 @@ var app = new Vue({
   el: '#app',
   data: {
     messages: [],
-    closed: false
+    hidden: false
   },
   created: function created() {
     var _this = this;
@@ -5589,9 +5595,19 @@ var app = new Vue({
         console.log(response.data);
       });
     },
+    open: function open() {
+      this.hidden = false;
+      window.top.postMessage('open', '*');
+    },
     close: function close() {
-      this.closed = !this.closed;
-      window.top.postMessage(this.closed ? 'close' : 'open', '*');
+      window.top.postMessage('closed', '*');
+    },
+    hideChat: function hideChat() {
+      this.hidden = true;
+      window.top.postMessage('hidden', '*');
+    },
+    expand: function expand() {
+      window.top.postMessage('expanded', '*');
     }
   }
 });
@@ -34766,7 +34782,8 @@ var render = function () {
             expression: "name",
           },
         ],
-        staticClass: "form-control input-sm d-inline-block",
+        staticClass:
+          "form-control input-sm d-inline-block bg-white bg-opacity-50",
         staticStyle: { width: "50%" },
         attrs: { type: "text", name: "name", placeholder: "username" },
         domProps: { value: _vm.name },
@@ -34784,11 +34801,16 @@ var render = function () {
         _c(
           "button",
           {
-            staticClass: "btn btn-primary btn-sm",
+            staticClass: "btn btn-dark btn-sm bg-opacity-10",
             attrs: { id: "btn-chat", disabled: !_vm.canSend },
             on: { click: _vm.sendMessage },
           },
-          [_vm._v("\n    Send\n  ")]
+          [
+            _c("i", {
+              staticClass: "fa fa-paper-plane",
+              attrs: { "aria-hidden": "true" },
+            }),
+          ]
         ),
         _vm.showAlert
           ? _c("span", { staticClass: "text-danger" }, [_vm._v("wait... ")])
@@ -34804,7 +34826,7 @@ var render = function () {
             expression: "newMessage",
           },
         ],
-        staticClass: "form-control input-sm mt-1",
+        staticClass: "form-control input-sm mt-1 bg-white bg-opacity-50",
         attrs: {
           id: "btn-input",
           type: "text",
@@ -34860,12 +34882,13 @@ var render = function () {
     "div",
     {
       staticClass: "chat overflow-scroll",
-      staticStyle: { "overflow-x": "hidden", height: "75vh" },
+      staticStyle: { "overflow-x": "hidden", height: "70vh" },
+      attrs: { id: "scroll" },
     },
-    _vm._l(_vm.messages.slice().reverse(), function (message) {
+    _vm._l(_vm.messages, function (message) {
       return _c("div", { key: message.id, staticClass: "left clearfix" }, [
         _c("div", [
-          _c("strong", [
+          _c("strong", { staticClass: "text-primary" }, [
             _vm._v(
               "\n                    " +
                 _vm._s(message.author.name) +
@@ -34900,18 +34923,11 @@ var render = function () {
             : _vm._e(),
         ]),
         _vm._v(" "),
-        _c(
-          "p",
-          {
-            staticClass:
-              "bg-secondary rounded d-inline-block p-1 bg-opacity-50 mb-1",
-          },
-          [
-            _vm._v(
-              "\n                " + _vm._s(message.message) + "\n            "
-            ),
-          ]
-        ),
+        _c("p", { staticClass: "d-inline-block text-white" }, [
+          _vm._v(
+            "\n                " + _vm._s(message.message) + "\n            "
+          ),
+        ]),
       ])
     }),
     0

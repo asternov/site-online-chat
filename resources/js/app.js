@@ -34,7 +34,7 @@ const app = new Vue({
     el: '#app',
     data: {
         messages: [],
-        closed: false,
+        hidden: false,
     },
     created() {
         this.fetchMessages();
@@ -77,9 +77,19 @@ const app = new Vue({
                 console.log(response.data);
             });
         },
+        open() {
+            this.hidden = false;
+            window.top.postMessage('open', '*')
+        },
         close() {
-            this.closed = !this.closed;
-            window.top.postMessage(this.closed ? 'close' : 'open', '*')
+            window.top.postMessage('closed', '*')
+        },
+        hideChat() {
+            this.hidden = true;
+            window.top.postMessage('hidden', '*')
+        },
+        expand() {
+            window.top.postMessage('expanded', '*')
         }
     }
 });

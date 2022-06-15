@@ -1,8 +1,8 @@
 <template>
-    <div class="chat overflow-scroll" style="overflow-x: hidden; height: 75vh">
-        <div class="left clearfix" v-for="message in messages.slice().reverse()" :key="message.id">
+    <div class="chat overflow-scroll" id="scroll" style="overflow-x: hidden; height: 70vh">
+        <div class="left clearfix" v-for="message in messages" :key="message.id">
                 <div>
-                    <strong>
+                    <strong class="text-primary">
                         {{ message.author.name }}:
                     </strong>
                     <button v-if="admin" class="btn btn-danger btn-sm" id="btn-chat" @click="deleteMessage(message.id)">
@@ -12,7 +12,7 @@
                         <fa-icon [icon]="faAlignJustify"></fa-icon>
                     </button>
                 </div>
-                <p class="bg-secondary rounded d-inline-block p-1 bg-opacity-50 mb-1">
+                <p class="d-inline-block text-white">
                     {{ message.message }}
                 </p>
         </div>
@@ -28,6 +28,12 @@ export default {
                 id: id,
             });
         },
+    },
+    mounted() {
+        window.setTimeout(function() {
+            var elem = document.getElementById('scroll');
+            elem.scrollTop = elem.scrollHeight;
+        }, 100);
     },
 };
 </script>

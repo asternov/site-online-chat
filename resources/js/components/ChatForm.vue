@@ -4,14 +4,14 @@
         <input
             type="text"
             name="name"
-            class="form-control input-sm d-inline-block"
+            class="form-control input-sm d-inline-block bg-white bg-opacity-50"
             placeholder="username"
             style="width: 50%"
             v-model="name"
         />
             <span class="input-group-btn d-inline-block">
-      <button class="btn btn-primary btn-sm" id="btn-chat" @click="sendMessage" :disabled="!canSend">
-        Send
+      <button class="btn btn-dark btn-sm bg-opacity-10" id="btn-chat" @click="sendMessage" :disabled="!canSend">
+        <i class="fa fa-paper-plane" aria-hidden="true"></i>
       </button><span v-if="showAlert" class="text-danger">wait... </span>
     </span>
 
@@ -19,7 +19,7 @@
             id="btn-input"
             type="text"
             name="message"
-            class="form-control input-sm mt-1"
+            class="form-control input-sm mt-1 bg-white bg-opacity-50"
             placeholder="Type your message here..."
             v-model="newMessage"
         @keyup.enter="sendMessage"
