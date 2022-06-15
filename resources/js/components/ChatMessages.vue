@@ -27,9 +27,15 @@ export default {
         },
     },
     mounted() {
-        window.setTimeout(function() {
+        var x = 0;
+        var intervalID = setInterval(function () {
+
             var elem = document.getElementById('scroll');
             elem.scrollTop = elem.scrollHeight;
+
+            if (++x === 10) {
+                window.clearInterval(intervalID);
+            }
         }, 100);
     },
 };
