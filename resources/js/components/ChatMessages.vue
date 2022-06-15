@@ -1,5 +1,5 @@
 <template>
-    <div class="chat overflow-scroll" id="scroll" style="overflow-x: hidden; height: 70vh">
+    <div class="chat overflow-scroll" id="scroll" style="overflow-x: hidden; height: 75vh">
         <div class="left clearfix" v-for="message in messages" :key="message.id">
                 <div>
                     <strong class="text-primary">
