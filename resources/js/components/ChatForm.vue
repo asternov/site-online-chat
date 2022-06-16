@@ -17,7 +17,7 @@
             type="text"
             name="message"
             class="form-control input-sm mt-1 bg-white d-inline-block bg-opacity-50"
-            style="width: 84%"
+            style="width: 80%"
             placeholder="Type your message here..."
             v-model="newMessage"
         @keyup.enter="sendMessage"
