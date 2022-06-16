@@ -9,21 +9,24 @@
             style="width: 50%"
             v-model="name"
         />
-            <span class="input-group-btn d-inline-block">
-      <button class="btn btn-dark btn-sm bg-opacity-10" id="btn-chat" @click="sendMessage" :disabled="!canSend">
-        <i class="fa fa-paper-plane" aria-hidden="true"></i>
-      </button><span v-if="showAlert" class="text-danger">wait... </span>
-    </span>
+      <span v-if="showAlert" class="text-danger">wait... </span>
+
 
         <input
             id="btn-input"
             type="text"
             name="message"
-            class="form-control input-sm mt-1 bg-white bg-opacity-50"
+            class="form-control input-sm mt-1 bg-white d-inline-block bg-opacity-50"
+            style="width: 84%"
             placeholder="Type your message here..."
             v-model="newMessage"
         @keyup.enter="sendMessage"
         />
+            <span class="input-group-btn d-inline-block">
+            <button class="btn btn-dark btn-lg bg-opacity-10" id="btn-chat" @click="sendMessage" :disabled="!canSend">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+                </span>
         </div>
     </div>
 </template>

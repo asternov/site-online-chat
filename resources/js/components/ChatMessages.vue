@@ -1,7 +1,7 @@
 <template>
-    <div class="chat overflow-scroll" id="scroll" style="overflow-x: hidden; height: 75vh">
+    <div class="chat overflow-scroll" id="scroll" :style="'overflow-x: hidden; height: ' + (wide ? 78 : 75) + 'vh'">
         <div class="left clearfix" v-for="message in messages" :key="message.id">
-                <div>
+                <div style="margin-bottom: -5px">
                     <strong :style="'color: #' + message.author.color" v-if="!message.group">
                         {{ message.author.name }}:
                     </strong>
@@ -9,7 +9,7 @@
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                 </div>
-                <p class="d-inline-block text-white">
+                <p class="d-inline-block text-white mb-2">
                     {{ message.message }}
                 </p>
         </div>
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-    props: ["messages", "admin"],
+    props: ["messages", "admin", "wide"],
     methods: {
         deleteMessage(id) {
             this.$emit("messagedelete", {
