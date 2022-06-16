@@ -31,7 +31,7 @@ class MessagesController extends Controller
     public function sendMessage(messageRequest $request)
     {
         function random_color_part() {
-            return str_pad( dechex( mt_rand( 100, 255 ) ), 2, '0', STR_PAD_LEFT);
+            return str_pad( dechex( mt_rand( 128, 255 ) ), 2, '0', STR_PAD_LEFT);
         }
 
         function random_color() {
