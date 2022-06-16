@@ -1,116 +1,71 @@
-  <?php
-    namespace Deployer;
+stages:
+  - build
+  - deploy
 
-    require 'recipe/laravel.php';
-    require 'recipe/deploy/lock.php';
-    require 'recipe/deploy/rollback.php';
-    require 'contrib/rsync.php';
-    require 'contrib/npm.php';
+image: efraimz/laravel-docker:9.0
 
-    // Project name
-    set('application', 'crm.tassfx.com');
-    set('keep_releases', 5);
+.init_ssh: &init_ssh |
+  mkdir -p ~/.ssh
+  chmod 700 ~/.ssh
+  eval $(ssh-agent -s)
+  echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
 
-    // laravel.php
-    task('prepare_application', function () {
-    run('mkdir -p {{release_path}}/bootstrap/cache');
-    run('mkdir -p {{release_path}}/storage/app/{public}');
-    run('mkdir -p {{release_path}}/storage/framework/{cache,sessions,views}');
-    run('mkdir -p {{release_path}}/storage/framework/cache/data');
-    run('mv -f {{release_path}}/.env.dist {{deploy_path}}/shared/.env');
-  });
-    task('php-fpm:reload', function () {
-    // nano /etc/sudoers
-    // crm ALL=(ALL) NOPASSWD:/etc/init.d/php8.0-fpm reload
-    run('sudo /etc/init.d/php8.0-fpm restart');
-  });
-    task('supervisor:reload', function () {
-    // nano /etc/sudoers
-    // crm ALL=(ALL) NOPASSWD:/usr/bin/supervisorctl reload
-    run('sudo /usr/bin/supervisorctl restart all');
-  });
+# Replace the last line with the following lines if you'd rather
+# leave StrictHostKeyChecking enabled (replace yourdomain.com):
+#  ssh-keyscan yourdomain.com >> ~/.ssh/known_hosts
+#  chmod 644 ~/.ssh/known_hosts
 
-    // Shared
-    add('shared_files', [
-    '.env',
-  ]);
-    add('shared_dirs', [
-    'storage'
-  ]);
 
-    // Writable
-    set('writable_chmod_mode', '0775');
-    set('writable_use_sudo', false);
-    add('writable_dirs', [
-    'bootstrap/cache',
-    'storage',
-    'storage/app',
-    'storage/app/public',
-    'storage/framework',
-    'storage/framework/cache',
-    'storage/framework/sessions',
-    'storage/framework/views',
-    'storage/logs',
-  ]);
+.change_file_permissions: &change_file_permissions |
+  find . -type f -not -path "./vendor/*" -exec chmod 664 {} \;
+  find . -type d -not -path "./vendor/*" -exec chmod 775 {} \;
 
-    host('crm.tassfx.com')
-    ->setRemoteUser('crm')
-    ->setPort(22)
-    ->setForwardAgent(true)
-    ->setSshMultiplexing(true)
-    ->setSshArguments(['-o UserKnownHostsFile=/dev/null'])
-    ->setSshArguments(['-o StrictHostKeyChecking=no'])
-    //->set('branch', 'main')
-    ->set('deploy_path', '/home/crm/crm.tassfx.com')
-    ->set('rsync_src', __DIR__)
-    ->set('rsync_dest','{{release_path}}');
+composer:
+  stage: build
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-composer
+    paths:
+      - vendor/
+  script:
+    - composer install --ignore-platform-reqs --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - cp .env.example .env
+    - composer dump-autoload
+    - php artisan config:clear
+    - php artisan cache:clear
+    - php artisan key:generate
+    - php artisan route:clear
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - vendor/
+      - .env
 
-    desc('Deploying...');
+npm:
+  stage: build
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-npm
+    paths:
+      - node_modules/
+  script:
+    - npm install
+    - npm run production
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - node_modules/
+      - public/css/
+      - public/js/
 
-    add('rsync', [
-    'exclude' => [
-    '.git',
-    '/.env',
-    '/.env.example',
-    '/example.env',
-    '/storage/',
-    '/vendor/',
-    '/node_modules/',
-    '.gitlab-ci.yml',
-    'deploy_tasks.php',
-    'staging.deploy.php',
-    'production.deploy.php',
-    '_ide_helper.php',
-    '_ide_helper_models.php',
-    ],
-  ]);
-
-    task('deploy:update_code', ['rsync', 'prepare_application', 'deploy:vendors']);
-
-    after('deploy:failed', 'deploy:unlock');
-
-    task('deploy', [
-    'deploy:prepare',
-    'deploy:release',
-    'deploy:update_code',   // Deploy code & built assets
-    'deploy:shared',        // Default recipe
-    'deploy:writable',      // Default recipe
-    'artisan:view:clear',   // |
-    'artisan:cache:clear',  // |
-    'artisan:config:clear', // |
-    'artisan:storage:link', // |
-    'artisan:config:cache', // | Laravel specific steps
-    'artisan:route:cache',  // |
-    'artisan:view:cache',   // |
-    'artisan:optimize',     // |
-    'artisan:migrate',      // |
-    'artisan:db:seed',      // |
-    'deploy:symlink',
-    'php-fpm:reload',
-    'supervisor:reload',
-    'deploy:unlock',
-    'deploy:cleanup',
-    'deploy:success',
-  ]);
-
-    desc('Finished');
+production:
+  stage: deploy
+  script:
+    - *init_ssh
+    - *change_file_permissions
+    - echo "$ENV_CRM" > .env.dist
+    - if [[ -f .env.dist ]]; then echo "Created .env.dist"; fi
+    - php ./vendor/bin/dep deploy -f ./production.deploy.php -vvv -o release_name=$CI_JOB_ID
+  environment:
+    name: main
+    url: https://chat.tassfx.com
+  only:
+    - main

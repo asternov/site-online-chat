@@ -106,7 +106,7 @@ const app = new Vue({
         },
         hideChat() {
             this.hidden = true;
-            window.top.postMessage('hidden', '*')
+            window.top.postMessage('only-button', '*')
         },
         expand() {
             this.wide = !this.wide;

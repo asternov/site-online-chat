@@ -12,7 +12,7 @@
     width: 25%;
 }
 
-.widget.hidden {
+.widget.only-button {
     overflow: hidden;
     width: 90px;
     height: 30px;
