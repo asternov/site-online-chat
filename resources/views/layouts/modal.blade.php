@@ -19,7 +19,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') . '?' . random_int(1, 999999) }}" rel="stylesheet">
 </head>
-<body style="overflow: hidden;">
+<body style="overflow: hidden; background-color: #292b2c">
     <div id="app">
         <main>
             @yield('content')

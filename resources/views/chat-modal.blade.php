@@ -8,7 +8,7 @@
         Chat
     </button>
     <div class="container p-0 h-100 " style="max-width: 100vw; max-height: 100vh"  style=" height: 100%" v-else>
-        <div class="card">
+        <div class="card" style="border-width: 0px">
             <div class="card-header  bg-dark">
                 <div class="d-flex justify-content-center text-white mx-auto" style="margin-bottom: -1.5em">Все трейдеры здесь</div><br>
                 <div class="d-flex justify-content-end" style="margin-top: -2em">
