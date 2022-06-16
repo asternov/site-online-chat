@@ -2,7 +2,7 @@
     <div class="chat overflow-scroll" id="scroll" style="overflow-x: hidden; height: 75vh">
         <div class="left clearfix" v-for="message in messages" :key="message.id">
                 <div>
-                    <strong class="text-primary">
+                    <strong :style="'color: #' + message.author.color" v-if="!message.group">
                         {{ message.author.name }}:
                     </strong>
                     <button v-if="admin" class="btn btn-danger btn-sm" id="btn-chat" @click="deleteMessage(message.id)">

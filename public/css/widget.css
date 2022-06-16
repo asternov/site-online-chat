@@ -4,10 +4,11 @@
     bottom: 20px;
     z-index: 999;
     opacity: 1;
+    border-radius: 1em;
 }
 
 .widget.open {
-    height: 78%;
+    height: 85%;
     width: 25%;
 }
 
@@ -18,7 +19,7 @@
 }
 
 .widget.expanded {
-    height: 78%;
+    height: 85%;
     width: 30%;
 }
 

@@ -9,16 +9,20 @@
     </button>
     <div class="container p-0 h-100" v-else>
         <div class="card">
-            <div class="card-header float-end justify-content-end text-right bg-dark">
-                <button class="btn btn-dark btn-sm mx-auto" id="hideChat" @click="hideChat">
+            <div class="card-header  bg-dark">
+                <div class="d-flex justify-content-center text-white mx-auto" style="margin-bottom: -1.5em">Все трейдеры здесь</div><br>
+                <div class="d-flex justify-content-end" style="margin-top: -2em">
+                <button class="btn btn-dark btn-sm" id="hideChat" @click="hideChat">
                     _
                 </button>
                 <button class="btn btn-dark btn-sm" id="expand" @click="expand">
-                    <i class="fa fa-square-o" aria-hidden="true"></i>
+                    <i class="fa fa-square-o" aria-hidden="true" v-if="!this.wide"></i>
+                    <i class="fa fa-compress" aria-hidden="true" v-else></i>
                 </button>
                 <button class="btn btn-dark btn-sm" id="close" @click="close">
                     X
                 </button>
+                </div>
             </div>
 
             <div class="card-body bg-dark py-1">

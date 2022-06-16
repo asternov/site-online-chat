@@ -20,6 +20,7 @@ class Author extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'color',
         'email',
         'password',
     ];

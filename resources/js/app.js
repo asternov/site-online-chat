@@ -34,7 +34,9 @@ const app = new Vue({
     el: '#app',
     data: {
         messages: [],
+        colors: [],
         hidden: false,
+        wide: false,
     },
     created() {
         this.fetchMessages();
@@ -51,15 +53,33 @@ const app = new Vue({
             });
     },
     methods: {
+        groupMessages() {
+            self = this;
+            self.lastMessage = {author: {name: null}};
+            this.messages.forEach((message) => {
+                message.group = false;
+
+                if (self.lastMessage.author.name == message.author.name) {
+                    message.group = true;
+                }
+
+                self.lastMessage = message;
+            })
+        },
         fetchMessages() {
             axios.get('/messages').then(response => {
                 this.messages = response.data;
+                this.groupMessages();
             });
         },
         addMessage(message) {
-            this.messages.push(message);
+            self = this;
+            self.message = message;
             axios.post('/messages', message).then(response => {
+                self.message.author.color = response.data.color;
+                self.messages.push(self.message);
                 console.log(response.data);
+                this.groupMessages();
             });
         },
         cleanMessages(message) {
@@ -89,7 +109,8 @@ const app = new Vue({
             window.top.postMessage('hidden', '*')
         },
         expand() {
-            window.top.postMessage('expanded', '*')
+            this.wide = !this.wide;
+            window.top.postMessage(this.wide ? 'expanded' : 'open', '*')
         }
     }
 });
