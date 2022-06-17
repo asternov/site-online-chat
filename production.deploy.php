@@ -53,15 +53,15 @@ add('writable_dirs', [
     'storage/logs',
 ]);
 
-host('crm.tassfx.com')
-    ->setRemoteUser('crm')
+host('tassfx.com')
+    ->setRemoteUser('chat')
     ->setPort(22)
     ->setForwardAgent(true)
     ->setSshMultiplexing(true)
     ->setSshArguments(['-o UserKnownHostsFile=/dev/null'])
     ->setSshArguments(['-o StrictHostKeyChecking=no'])
     //->set('branch', 'main')
-    ->set('deploy_path', '/home/crm/crm.tassfx.com')
+    ->set('deploy_path', '/home/chat/chat.tassfx.com')
     ->set('rsync_src', __DIR__)
     ->set('rsync_dest','{{release_path}}');
 
