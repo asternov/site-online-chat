@@ -15,7 +15,6 @@ image: efraimz/laravel-docker:8.0
 #  ssh-keyscan yourdomain.com >> ~/.ssh/known_hosts
 #  chmod 644 ~/.ssh/known_hosts
 
-
 .change_file_permissions: &change_file_permissions |
   find . -type f -not -path "./vendor/*" -exec chmod 664 {} \;
   find . -type d -not -path "./vendor/*" -exec chmod 775 {} \;
