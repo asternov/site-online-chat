@@ -9,7 +9,7 @@ require 'contrib/npm.php';
 
 
 // Project name
-set('application', 'crm.tassfx.com');
+set('application', 'chat.tassfx.com');
 set('keep_releases', 5);
 
 // laravel.php
@@ -55,7 +55,7 @@ add('writable_dirs', [
     'storage/logs',
 ]);
 
-host('tassfx.com')
+host('chat.tassfx.com')
     ->setRemoteUser('chat')
     ->setPort(22)
     ->setForwardAgent(true)
