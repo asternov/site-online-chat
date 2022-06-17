@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-image: efraimz/laravel-docker:9.0
+image: efraimz/laravel-docker:8.0
 
 .init_ssh: &init_ssh |
   mkdir -p ~/.ssh
