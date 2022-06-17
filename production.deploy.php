@@ -13,6 +13,7 @@ set('application', 'crm.tassfx.com');
 set('keep_releases', 5);
 
 // laravel.php
+
 task('prepare_application', function () {
     run('mkdir -p {{release_path}}/bootstrap/cache');
     run('mkdir -p {{release_path}}/storage/app/{public}');
