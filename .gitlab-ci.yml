@@ -9,7 +9,6 @@ image: efraimz/laravel-docker:8.0
   chmod 700 ~/.ssh
   eval $(ssh-agent -s)
   echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-  echo "$SSH_PRIVATE_KEY"
 
 # Replace the last line with the following lines if you'd rather
 # leave StrictHostKeyChecking enabled (replace yourdomain.com):
