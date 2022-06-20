@@ -4,7 +4,6 @@ stages:
 
 image: efraimz/laravel-docker:8.0
 
-
 .init_ssh: &init_ssh |
   mkdir -p ~/.ssh
   chmod 700 ~/.ssh
