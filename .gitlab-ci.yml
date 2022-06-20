@@ -60,7 +60,7 @@ production:
   script:
     - *init_ssh
     - *change_file_permissions
-    - echo "$ENV_CRM" > .env.dist
+    - echo "$ENV_CHAT" > .env.dist
     - if [[ -f .env.dist ]]; then echo "Created .env.dist"; fi
     - php ./vendor/bin/dep deploy -f ./production.deploy.php -vvv -o release_name=$CI_JOB_ID
   environment:
