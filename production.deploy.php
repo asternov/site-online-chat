@@ -108,7 +108,6 @@ task('deploy', [
     'artisan:migrate',      // |
     'artisan:db:seed',      // |
     'deploy:symlink',
-    'supervisor:reload',
     'deploy:unlock',
     'deploy:cleanup',
     'deploy:success',

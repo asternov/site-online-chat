@@ -16,7 +16,6 @@
                 <p class="d-inline-block text-white mb-2"  v-if="!message.group">
                     {{ message.message }}
                 </p>
-
         </div>
     </div>
 </template>

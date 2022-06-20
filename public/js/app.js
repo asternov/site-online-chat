@@ -5496,7 +5496,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["messages", "admin", "wide"],
   methods: {
@@ -5587,7 +5586,9 @@ var app = new Vue({
           name: null
         }
       };
+      self.date = message.created_at;
       this.messages.forEach(function (message) {
+        message.date;
         message.group = false;
 
         if (self.lastMessage.author.name == message.author.name) {

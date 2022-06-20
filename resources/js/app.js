@@ -57,7 +57,10 @@ const app = new Vue({
         groupMessages() {
             self = this;
             self.lastMessage = {author: {name: null}};
+            self.date = message.created_at
+
             this.messages.forEach((message) => {
+                message.date
                 message.group = false;
 
                 if (self.lastMessage.author.name == message.author.name) {
