@@ -108,7 +108,6 @@ task('deploy', [
     'artisan:migrate',      // |
     'artisan:db:seed',      // |
     'deploy:symlink',
-    'php-fpm:reload',
     'supervisor:reload',
     'deploy:unlock',
     'deploy:cleanup',
