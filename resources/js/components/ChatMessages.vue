@@ -8,10 +8,15 @@
                     <button v-if="admin" class="btn btn-danger btn-sm" id="btn-chat" @click="deleteMessage(message.id)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
+
+                    <span class="d-inline-block text-white mb-2 float-end">
+                        {{ message.created_at | moment("H:mm") }}
+                    </span>
                 </div>
-                <p class="d-inline-block text-white mb-2">
+                <p class="d-inline-block text-white mb-2"  v-if="!message.group">
                     {{ message.message }}
                 </p>
+
         </div>
     </div>
 </template>

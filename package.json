@@ -30,6 +30,7 @@
         "fa-icons": "^0.2.0",
         "font-awesome": "^4.7.0",
         "laravel-echo": "^1.11.7",
-        "pusher-js": "^7.1.0-beta"
+        "pusher-js": "^7.1.0-beta",
+        "vue-moment": "^4.1.0"
     }
 }
