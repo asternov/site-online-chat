@@ -5668,6 +5668,8 @@ var app = new Vue({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
 /* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
+var _process$env$PUSHER_A, _process$env$PUSHER_A2;
+
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 try {
@@ -5692,8 +5694,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: process.env.PUSHER_APP_KEY,
-  cluster: process.env.PUSHER_APP_CLUSTER,
+  key: (_process$env$PUSHER_A = process.env.PUSHER_APP_KEY) !== null && _process$env$PUSHER_A !== void 0 ? _process$env$PUSHER_A : '76914329f2e531dbbef7',
+  cluster: (_process$env$PUSHER_A2 = process.env.PUSHER_APP_CLUSTER) !== null && _process$env$PUSHER_A2 !== void 0 ? _process$env$PUSHER_A2 : 'eu',
   forceTLS: true
 });
 
