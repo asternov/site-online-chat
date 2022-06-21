@@ -65,7 +65,6 @@ const app = new Vue({
                     message.date = true;
                 }
 
-
                 message.group = false;
 
                 if (self.lastMessage.author.name == message.author.name) {
