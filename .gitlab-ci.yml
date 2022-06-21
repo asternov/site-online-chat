@@ -69,3 +69,17 @@ production:
     url: https://chat.tassfx.com
   only:
     - main
+
+dev:
+  stage: deploy
+  script:
+    - *init_ssh
+    - *change_file_permissions
+    - echo "$ENV_CHAT" > .env.dist
+    - if [[ -f .env.dist ]]; then echo "Created .env.dist"; fi
+    - php ./vendor/bin/dep deploy -f ./dev.deploy.php -vvv -o release_name=$CI_JOB_ID
+  environment:
+    name: dev
+    url: https://chat.tassfx.com
+  only:
+    - dev
