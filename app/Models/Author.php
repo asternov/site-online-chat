@@ -23,7 +23,16 @@ class Author extends Authenticatable
         'color',
         'email',
         'password',
+        'hash',
     ];
+
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($author) {
+            $author->messages()->delete();
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.

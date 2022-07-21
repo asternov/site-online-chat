@@ -5400,6 +5400,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5407,8 +5415,15 @@ __webpack_require__.r(__webpack_exports__);
       name: "",
       timestamp: 0,
       msgCount: 0,
-      showAlert: false
+      showAlert: false,
+      nameAlert: false,
+      start: true
     };
+  },
+  watch: {
+    name: function name(val) {
+      this.nameAlert = false;
+    }
   },
   computed: {
     canSend: function canSend() {
@@ -5421,6 +5436,12 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return true;
+    }
+  },
+  created: function created() {
+    if (this.$cookie.get('name')) {
+      this.name = this.$cookie.get('name');
+      this.start = false;
     }
   },
   methods: {
@@ -5454,9 +5475,46 @@ __webpack_require__.r(__webpack_exports__);
         author: {
           name: this.name
         },
+        created_at: Vue.moment(),
         message: this.newMessage
       });
       this.newMessage = "";
+    },
+    setUsername: function setUsername() {
+      var _this2 = this;
+
+      var data = {
+        name: this.name,
+        hash: this.$cookie.get("hash")
+      };
+      axios.post('/author/check', data).then(function (response) {
+        if (!response.data.status) {
+          _this2.nameAlert = true;
+          return false;
+        }
+
+        _this2.$cookie.set("name", _this2.name, {
+          expires: '1Y'
+        });
+
+        _this2.start = false;
+
+        _this2.$parent.update();
+      });
+    },
+    restart: function restart() {
+      var _this3 = this;
+
+      var data = {
+        name: this.name,
+        hash: this.$cookie.get("hash")
+      };
+      axios.post('/author/delete', data).then(function (response) {
+        _this3.$parent.fetchMessages();
+      });
+      this.nameAlert = false;
+      this.$cookie["delete"]("name");
+      this.start = true;
     }
   }
 });
@@ -5550,6 +5608,7 @@ window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js
 Vue.component('chat-messages', (__webpack_require__(/*! ./components/ChatMessages.vue */ "./resources/js/components/ChatMessages.vue")["default"]));
 Vue.component('chat-form', (__webpack_require__(/*! ./components/ChatForm.vue */ "./resources/js/components/ChatForm.vue")["default"]));
 Vue.use(__webpack_require__(/*! vue-moment */ "./node_modules/vue-moment/dist/vue-moment.js"));
+Vue.use(__webpack_require__(/*! vue-cookie */ "./node_modules/vue-cookie/src/vue-cookie.js"));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -5563,12 +5622,24 @@ var app = new Vue({
     messages: [],
     colors: [],
     hidden: false,
-    wide: false
+    wide: false,
+    name: '',
+    start: true
+  },
+  computed: {
+    getName: function getName() {
+      if (this.$refs.form && this.$refs.form.name) {
+        return this.$refs.form.name;
+      }
+
+      return '&nbsp;';
+    }
   },
   created: function created() {
     var _this = this;
 
     this.fetchMessages();
+    this.update();
     window.Echo.channel('chat').listen('MessageSent', function (e) {
       _this.messages.push({
         message: e.message.message,
@@ -5586,7 +5657,7 @@ var app = new Vue({
           name: null
         }
       };
-      self.date = moment(message.created_at);
+      self.date = Vue.moment();
       this.messages.forEach(function (message) {
         if (self.date.diff(message.created_at, 'days')) {
           message.date = true;
@@ -5600,6 +5671,18 @@ var app = new Vue({
 
         self.lastMessage = message;
       });
+      this.scroll();
+    },
+    scroll: function scroll() {
+      var x = 0;
+      var intervalID = setInterval(function () {
+        var elem = document.getElementById('scroll');
+        elem.scrollTop = elem.scrollHeight;
+
+        if (++x === 5) {
+          window.clearInterval(intervalID);
+        }
+      }, 100);
     },
     fetchMessages: function fetchMessages() {
       var _this2 = this;
@@ -5614,8 +5697,19 @@ var app = new Vue({
       var _this3 = this;
 
       self = this;
+      message.hash = this.$cookie.get("hash");
       self.message = message;
       axios.post('/messages', message).then(function (response) {
+        if (!response.data.status) {
+          return false;
+        }
+
+        if (response.data.hash) {
+          _this3.$cookie.set("hash", response.data.hash, {
+            expires: '1Y'
+          });
+        }
+
         self.message.author.color = response.data.color;
         self.messages.push(self.message);
         console.log(response.data);
@@ -5652,6 +5746,15 @@ var app = new Vue({
     expand: function expand() {
       this.wide = !this.wide;
       window.top.postMessage(this.wide ? 'expanded' : 'open', '*');
+    },
+    restart: function restart() {
+      this.$refs.form.restart();
+    },
+    update: function update() {
+      var self = this;
+      setTimeout(function () {
+        self.name = self.$refs.form.name;
+      }, 100);
     }
   }
 });
@@ -34658,6 +34761,216 @@ runtime.setup(pusher_Pusher);
 
 /***/ }),
 
+/***/ "./node_modules/tiny-cookie/tiny-cookie.js":
+/*!*************************************************!*\
+  !*** ./node_modules/tiny-cookie/tiny-cookie.js ***!
+  \*************************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * tiny-cookie - A tiny cookie manipulation plugin
+ * https://github.com/Alex1990/tiny-cookie
+ * Under the MIT license | (c) Alex Chao
+ */
+
+!(function(root, factory) {
+
+  // Uses CommonJS, AMD or browser global to create a jQuery plugin.
+  // See: https://github.com/umdjs/umd
+  if (true) {
+    // Expose this plugin as an AMD module. Register an anonymous module.
+    !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+		(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+		__WEBPACK_AMD_DEFINE_FACTORY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+
+}(this, function() {
+
+  'use strict';
+
+  // The public function which can get/set/remove cookie.
+  function Cookie(key, value, opts) {
+    if (value === void 0) {
+      return Cookie.get(key);
+    } else if (value === null) {
+      Cookie.remove(key);
+    } else {
+      Cookie.set(key, value, opts);
+    }
+  }
+
+  // Check if the cookie is enabled.
+  Cookie.enabled = function() {
+    var key = '__test_key';
+    var enabled;
+
+    document.cookie = key + '=1';
+    enabled = !!document.cookie;
+
+    if (enabled) Cookie.remove(key);
+
+    return enabled;
+  };
+
+  // Get the cookie value by the key.
+  Cookie.get = function(key, raw) {
+    if (typeof key !== 'string' || !key) return null;
+
+    key = '(?:^|; )' + escapeRe(key) + '(?:=([^;]*?))?(?:;|$)';
+
+    var reKey = new RegExp(key);
+    var res = reKey.exec(document.cookie);
+
+    return res !== null ? (raw ? res[1] : decodeURIComponent(res[1])) : null;
+  };
+
+  // Get the cookie's value without decoding.
+  Cookie.getRaw = function(key) {
+    return Cookie.get(key, true);
+  };
+
+  // Set a cookie.
+  Cookie.set = function(key, value, raw, opts) {
+    if (raw !== true) {
+      opts = raw;
+      raw = false;
+    }
+    opts = opts ? convert(opts) : convert({});
+    var cookie = key + '=' + (raw ? value : encodeURIComponent(value)) + opts;
+    document.cookie = cookie;
+  };
+
+  // Set a cookie without encoding the value.
+  Cookie.setRaw = function(key, value, opts) {
+    Cookie.set(key, value, true, opts);
+  };
+
+  // Remove a cookie by the specified key.
+  Cookie.remove = function(key) {
+    Cookie.set(key, 'a', { expires: new Date() });
+  };
+
+  // Helper function
+  // ---------------
+
+  // Escape special characters.
+  function escapeRe(str) {
+    return str.replace(/[.*+?^$|[\](){}\\-]/g, '\\$&');
+  }
+
+  // Convert an object to a cookie option string.
+  function convert(opts) {
+    var res = '';
+
+    for (var p in opts) {
+      if (opts.hasOwnProperty(p)) {
+
+        if (p === 'expires') {
+          var expires = opts[p];
+          if (typeof expires !== 'object') {
+            expires += typeof expires === 'number' ? 'D' : '';
+            expires = computeExpires(expires);
+          }
+          opts[p] = expires.toUTCString();
+        }
+
+        if (p === 'secure') {
+          if (opts[p]) {
+            res += ';' + p;
+          }
+
+          continue;
+        }
+
+        res += ';' + p + '=' + opts[p];
+      }
+    }
+
+    if (!opts.hasOwnProperty('path')) {
+      res += ';path=/';
+    }
+
+    return res;
+  }
+
+  // Return a future date by the given string.
+  function computeExpires(str) {
+    var expires = new Date();
+    var lastCh = str.charAt(str.length - 1);
+    var value = parseInt(str, 10);
+
+    switch (lastCh) {
+      case 'Y': expires.setFullYear(expires.getFullYear() + value); break;
+      case 'M': expires.setMonth(expires.getMonth() + value); break;
+      case 'D': expires.setDate(expires.getDate() + value); break;
+      case 'h': expires.setHours(expires.getHours() + value); break;
+      case 'm': expires.setMinutes(expires.getMinutes() + value); break;
+      case 's': expires.setSeconds(expires.getSeconds() + value); break;
+      default: expires = new Date(str);
+    }
+
+    return expires;
+  }
+
+  return Cookie;
+
+}));
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-cookie/src/vue-cookie.js":
+/*!***************************************************!*\
+  !*** ./node_modules/vue-cookie/src/vue-cookie.js ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+(function () {
+    Number.isInteger = Number.isInteger || function (value) {
+        return typeof value === 'number' &&
+            isFinite(value) &&
+            Math.floor(value) === value;
+    };
+    var Cookie = __webpack_require__(/*! tiny-cookie */ "./node_modules/tiny-cookie/tiny-cookie.js");
+
+    var VueCookie = {
+
+        install: function (Vue) {
+            Vue.prototype.$cookie = this;
+            Vue.cookie = this;
+        },
+        set: function (name, value, daysOrOptions) {
+            var opts = daysOrOptions;
+            if(Number.isInteger(daysOrOptions)) {
+                opts = {expires: daysOrOptions};
+            }
+            return Cookie.set(name, value, opts);
+        },
+
+        get: function (name) {
+            return Cookie.get(name);
+        },
+
+        delete: function (name, options) {
+            var opts = {expires: -1};
+            if(options !== undefined) {
+                opts = Object.assign(options, opts);
+            }
+            this.set(name, '', opts);
+        }
+    };
+
+    if (true) {
+        module.exports = VueCookie;
+    } else {}
+
+})();
+
+
+/***/ }),
+
 /***/ "./resources/js/components/ChatForm.vue":
 /*!**********************************************!*\
   !*** ./resources/js/components/ChatForm.vue ***!
@@ -34820,88 +35133,111 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "input-group" }, [
     _c("div", { staticClass: "w-100" }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.name,
-            expression: "name",
-          },
-        ],
-        staticClass:
-          "form-control input-sm d-inline-block bg-white bg-opacity-50",
-        staticStyle: { width: "50%" },
-        attrs: { type: "text", name: "name", placeholder: "username" },
-        domProps: { value: _vm.name },
-        on: {
-          input: function ($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.name = $event.target.value
-          },
-        },
-      }),
-      _vm._v(" "),
-      _vm.showAlert
-        ? _c("span", { staticClass: "text-danger" }, [_vm._v("wait... ")])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.newMessage,
-            expression: "newMessage",
-          },
-        ],
-        staticClass:
-          "form-control input-sm mt-1 bg-white d-inline-block bg-opacity-50",
-        staticStyle: { width: "80%" },
-        attrs: {
-          id: "btn-input",
-          type: "text",
-          name: "message",
-          placeholder: "Type your message here...",
-        },
-        domProps: { value: _vm.newMessage },
-        on: {
-          keyup: function ($event) {
-            if (
-              !$event.type.indexOf("key") &&
-              _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-            ) {
-              return null
-            }
-            return _vm.sendMessage.apply(null, arguments)
-          },
-          input: function ($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.newMessage = $event.target.value
-          },
-        },
-      }),
-      _vm._v(" "),
-      _c("span", { staticClass: "input-group-btn d-inline-block" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-dark btn-lg bg-opacity-10",
-            attrs: { id: "btn-chat", disabled: !_vm.canSend },
-            on: { click: _vm.sendMessage },
-          },
-          [
-            _c("i", {
-              staticClass: "fa fa-paper-plane",
-              attrs: { "aria-hidden": "true" },
+      _vm.start
+        ? _c("div", [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.name,
+                  expression: "name",
+                },
+              ],
+              staticClass:
+                "form-control input-sm d-inline-block bg-white bg-opacity-50",
+              staticStyle: { width: "50%" },
+              attrs: { type: "text", name: "name", placeholder: "username" },
+              domProps: { value: _vm.name },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.name = $event.target.value
+                },
+              },
             }),
-          ]
-        ),
-      ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-dark btn-lg bg-opacity-10",
+                attrs: { id: "btn-start" },
+                on: { click: _vm.setUsername },
+              },
+              [_vm._v("\n            start\n        ")]
+            ),
+            _vm._v(" "),
+            _vm.nameAlert
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "text-danger",
+                    staticStyle: { "margin-top": "-0.6em" },
+                  },
+                  [_vm._v("Имя не доступно")]
+                )
+              : _vm._e(),
+          ])
+        : _c("div", [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newMessage,
+                  expression: "newMessage",
+                },
+              ],
+              staticClass:
+                "form-control input-sm mt-1 bg-white d-inline-block bg-opacity-50",
+              staticStyle: { width: "80%" },
+              attrs: {
+                id: "btn-input",
+                type: "text",
+                name: "message",
+                placeholder: "Type your message here...",
+              },
+              domProps: { value: _vm.newMessage },
+              on: {
+                keyup: function ($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  return _vm.sendMessage.apply(null, arguments)
+                },
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.newMessage = $event.target.value
+                },
+              },
+            }),
+            _vm._v(" "),
+            _vm.showAlert
+              ? _c("span", { staticClass: "text-danger" }, [_vm._v("wait... ")])
+              : _c("span", { staticClass: "input-group-btn d-inline-block" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-dark btn-lg bg-opacity-10",
+                      attrs: { id: "btn-chat", disabled: !_vm.canSend },
+                      on: { click: _vm.sendMessage },
+                    },
+                    [
+                      _c("i", {
+                        staticClass: "fa fa-paper-plane",
+                        attrs: { "aria-hidden": "true" },
+                      }),
+                    ]
+                  ),
+                ]),
+          ]),
     ]),
   ])
 }
@@ -34932,65 +35268,61 @@ var render = function () {
     "div",
     {
       staticClass: "chat overflow-scroll",
-      style: "overflow-x: hidden; height: " + (_vm.wide ? 78 : 75) + "vh",
+      style: "overflow-x: hidden; height: " + (_vm.wide ? 79 : 77) + "vh",
       attrs: { id: "scroll" },
     },
     _vm._l(_vm.messages, function (message) {
       return _c("div", { key: message.id, staticClass: "left clearfix" }, [
-        _c("div", { staticStyle: { "margin-bottom": "-5px" } }, [
-          !message.group
-            ? _c("strong", { style: "color: #" + message.author.color }, [
+        !message.group
+          ? _c("div", { staticStyle: { "margin-bottom": "-5px" } }, [
+              _c("strong", { style: "color: #" + message.author.color }, [
                 _vm._v(
                   "\n                    " +
                     _vm._s(message.author.name) +
                     ":\n                "
                 ),
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.admin
-            ? _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger btn-sm",
-                  attrs: { id: "btn-chat" },
-                  on: {
-                    click: function ($event) {
-                      return _vm.deleteMessage(message.id)
+              ]),
+              _vm._v(" "),
+              _vm.admin
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger btn-sm",
+                      attrs: { id: "btn-chat" },
+                      on: {
+                        click: function ($event) {
+                          return _vm.deleteMessage(message.id)
+                        },
+                      },
                     },
-                  },
-                },
+                    [
+                      _c("i", {
+                        staticClass: "fa fa-trash",
+                        attrs: { "aria-hidden": "true" },
+                      }),
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "span",
+                { staticClass: "d-inline-block text-white mb-2 float-end" },
                 [
-                  _c("i", {
-                    staticClass: "fa fa-trash",
-                    attrs: { "aria-hidden": "true" },
-                  }),
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm._f("moment")(message.created_at, "H:mm")) +
+                      "\n                "
+                  ),
                 ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "span",
-            { staticClass: "d-inline-block text-white mb-2 float-end" },
-            [
-              _vm._v(
-                "\n                    " +
-                  _vm._s(_vm._f("moment")(message.created_at, "H:mm")) +
-                  "\n                "
-              ),
-            ]
-          ),
-        ]),
-        _vm._v(" "),
-        !message.group
-          ? _c("p", { staticClass: "d-inline-block text-white mb-2" }, [
-              _vm._v(
-                "\n                " +
-                  _vm._s(message.message) +
-                  "\n            "
               ),
             ])
           : _vm._e(),
+        _vm._v(" "),
+        _c("p", { staticClass: "d-inline-block text-white mb-2" }, [
+          _vm._v(
+            "\n                " + _vm._s(message.message) + "\n            "
+          ),
+        ]),
       ])
     }),
     0

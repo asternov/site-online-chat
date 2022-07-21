@@ -1,6 +1,7 @@
 <template>
     <div class="input-group">
         <div class="w-100">
+            <div v-if="start">
         <input
             type="text"
             name="name"
@@ -8,10 +9,15 @@
             placeholder="username"
             style="width: 50%"
             v-model="name"
+
         />
-      <span v-if="showAlert" class="text-danger">wait... </span>
 
-
+            <button class="btn btn-dark btn-lg bg-opacity-10" id="btn-start" @click="setUsername">
+                start
+            </button>
+                <div v-if="nameAlert" class="text-danger" style="margin-top: -0.6em">Имя не доступно</div>
+            </div>
+            <div v-else>
         <input
             id="btn-input"
             type="text"
@@ -22,11 +28,13 @@
             v-model="newMessage"
         @keyup.enter="sendMessage"
         />
-            <span class="input-group-btn d-inline-block">
+                <span v-if="showAlert" class="text-danger">wait... </span>
+            <span class="input-group-btn d-inline-block" v-else>
             <button class="btn btn-dark btn-lg bg-opacity-10" id="btn-chat" @click="sendMessage" :disabled="!canSend">
                 <i class="fa fa-paper-plane" aria-hidden="true"></i>
             </button>
                 </span>
+            </div>
         </div>
     </div>
 </template>
@@ -40,7 +48,14 @@ export default {
             timestamp: 0,
             msgCount: 0,
             showAlert: false,
+            nameAlert: false,
+            start: true
         };
+    },
+    watch: {
+        name: function (val) {
+            this.nameAlert = false;
+        },
     },
     computed: {
         canSend() {
@@ -53,6 +68,12 @@ export default {
             }
 
             return true;
+        }
+    },
+    created() {
+        if (this.$cookie.get('name')) {
+            this.name = this.$cookie.get('name');
+            this.start = false;
         }
     },
     methods: {
@@ -84,11 +105,45 @@ export default {
             this.$emit("messagesent", {
                 sender: this.name,
                 author: {name: this.name},
+                created_at: Vue.moment(),
                 message: this.newMessage,
             });
 
             this.newMessage = "";
-        }
+        },
+        setUsername() {
+            let data = {
+                name: this.name,
+                hash: this.$cookie.get("hash")
+            }
+
+            axios.post('/author/check', data).then(response => {
+                if (!response.data.status) {
+                    this.nameAlert = true;
+
+                    return false;
+                }
+
+                this.$cookie.set("name", this.name, { expires: '1Y' });
+                this.start = false;
+                this.$parent.update();
+            });
+        },
+        restart() {
+            let data = {
+                name: this.name,
+                hash: this.$cookie.get("hash")
+            }
+
+            axios.post('/author/delete', data).then(response => {
+                this.$parent.fetchMessages();
+            });
+
+            this.nameAlert = false;
+            this.$cookie.delete("name");
+            this.start = true;
+        },
     },
+
 };
 </script>

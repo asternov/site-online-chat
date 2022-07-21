@@ -22,6 +22,8 @@ Route::get('/', function () {
 });
 
 Route::get('/chat', [App\Http\Controllers\MessagesController::class, 'index']);
+Route::post('/author/check', [App\Http\Controllers\AuthorController::class, 'check']);
+Route::post('/author/delete', [App\Http\Controllers\AuthorController::class, 'delete']);
 Route::get('/widget', [App\Http\Controllers\MessagesController::class, 'widget']);
 Route::get('/messages', [App\Http\Controllers\MessagesController::class, 'fetchMessages']);
 Route::post('/messages', [App\Http\Controllers\MessagesController::class, 'sendMessage']);

@@ -1,8 +1,8 @@
 <template>
-    <div class="chat overflow-scroll" id="scroll" :style="'overflow-x: hidden; height: ' + (wide ? 78 : 75) + 'vh'">
+    <div class="chat overflow-scroll" id="scroll" :style="'overflow-x: hidden; height: ' + (wide ? 79 : 77) + 'vh'">
         <div class="left clearfix" v-for="message in messages" :key="message.id">
-                <div style="margin-bottom: -5px">
-                    <strong :style="'color: #' + message.author.color" v-if="!message.group">
+                <div style="margin-bottom: -5px" v-if="!message.group">
+                    <strong :style="'color: #' + message.author.color">
                         {{ message.author.name }}:
                     </strong>
                     <button v-if="admin" class="btn btn-danger btn-sm" id="btn-chat" @click="deleteMessage(message.id)">
@@ -13,7 +13,7 @@
                         {{ message.created_at | moment("H:mm") }}
                     </span>
                 </div>
-                <p class="d-inline-block text-white mb-2"  v-if="!message.group">
+                <p class="d-inline-block text-white mb-2">
                     {{ message.message }}
                 </p>
         </div>

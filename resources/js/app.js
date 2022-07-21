@@ -22,6 +22,7 @@ window.Vue = require('vue').default;
 Vue.component('chat-messages', require('./components/ChatMessages.vue').default);
 Vue.component('chat-form', require('./components/ChatForm.vue').default);
 Vue.use(require('vue-moment'));
+Vue.use(require('vue-cookie'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -38,9 +39,21 @@ const app = new Vue({
         colors: [],
         hidden: false,
         wide: false,
+        name: '',
+        start: true,
+    },
+    computed: {
+        getName() {
+            if (this.$refs.form && this.$refs.form.name) {
+                return this.$refs.form.name
+            }
+
+            return '&nbsp;';
+        }
     },
     created() {
         this.fetchMessages();
+        this.update();
 
         window.Echo.channel('chat')
             .listen('MessageSent', (e) => {
@@ -57,10 +70,9 @@ const app = new Vue({
         groupMessages() {
             self = this;
             self.lastMessage = {author: {name: null}};
-            self.date = moment(message.created_at);
+            self.date = Vue.moment();
 
             this.messages.forEach((message) => {
-
                 if (self.date.diff(message.created_at, 'days')) {
                     message.date = true;
                 }
@@ -72,18 +84,41 @@ const app = new Vue({
                 }
 
                 self.lastMessage = message;
-            })
+            });
+            this.scroll();
+        },
+        scroll() {
+            var x = 0;
+            var intervalID = setInterval(function () {
+
+                var elem = document.getElementById('scroll');
+                elem.scrollTop = elem.scrollHeight;
+
+                if (++x === 5) {
+                    window.clearInterval(intervalID);
+                }
+            }, 100);
         },
         fetchMessages() {
             axios.get('/messages').then(response => {
                 this.messages = response.data;
                 this.groupMessages();
+
             });
         },
         addMessage(message) {
             self = this;
+            message.hash = this.$cookie.get("hash");
             self.message = message;
             axios.post('/messages', message).then(response => {
+                if (!response.data.status) {
+                    return false;
+                }
+
+                if (response.data.hash) {
+                    this.$cookie.set("hash", response.data.hash, { expires: '1Y' });
+                }
+
                 self.message.author.color = response.data.color;
                 self.messages.push(self.message);
                 console.log(response.data);
@@ -119,6 +154,16 @@ const app = new Vue({
         expand() {
             this.wide = !this.wide;
             window.top.postMessage(this.wide ? 'expanded' : 'open', '*')
-        }
+        },
+        restart(){
+            this.$refs.form.restart();
+        },
+        update() {
+            var self = this;
+
+            setTimeout(() => {
+                self.name = self.$refs.form.name;
+            }, 100)
+        },
     }
 });
