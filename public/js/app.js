@@ -5642,6 +5642,7 @@ var app = new Vue({
     window.Echo.channel('chat').listen('MessageSent', function (e) {
       _this.messages.push({
         message: e.message.message,
+        created_at: e.message.created_at,
         author: e.user
       });
     }).listen('MessageDelete', function (e) {
@@ -35267,7 +35268,7 @@ var render = function () {
     "div",
     {
       staticClass: "chat overflow-scroll",
-      style: "overflow-x: hidden; height: " + (_vm.wide ? 79 : 76) + "vh",
+      staticStyle: { "overflow-x": "hidden", height: "calc(100vh - 11em)" },
       attrs: { id: "scroll" },
     },
     _vm._l(_vm.messages, function (message) {

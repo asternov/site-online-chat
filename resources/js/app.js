@@ -59,6 +59,7 @@ const app = new Vue({
             .listen('MessageSent', (e) => {
                 this.messages.push({
                     message: e.message.message,
+                    created_at: e.message.created_at,
                     author: e.user
                 });
             })

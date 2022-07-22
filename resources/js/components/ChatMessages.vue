@@ -1,5 +1,5 @@
 <template>
-    <div class="chat overflow-scroll" id="scroll" :style="'overflow-x: hidden; height: ' + (wide ? 79 : 76) + 'vh'">
+    <div class="chat overflow-scroll" id="scroll" style="overflow-x: hidden; height: calc(100vh - 11em);">
         <div class="left clearfix" v-for="message in messages" :key="message.id">
                 <div style="margin-bottom: -5px" v-if="!message.group">
                     <strong :style="'color: #' + message.author.color">
