@@ -25,6 +25,7 @@
                 </div>
             </div>
             <div class="card-header  bg-dark">
+                <div v-if="!this.getName">&nbsp;</div>
                 <div class="text-white mx-auto" style="margin-bottom: -1.5em; vertical-align: middle;" v-html="this.getName">
                 </div>
                 <div class=" text-white bg-warning rounded-3 float-end px-2" @click="restart" >Сменить имя</div>
