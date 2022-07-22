@@ -40,9 +40,6 @@ class AuthorController extends Controller
         /** @var Author $author */
             $author = $q->first();
 
-        info('AuthorController $user->hash', [$author->hash]);
-        info('AuthorController $request->hash', [$request->hash]);
-
             if ($author && $author->hash === $request->hash) {
                     $status = $author->delete();
             }

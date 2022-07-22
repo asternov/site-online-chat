@@ -5498,8 +5498,7 @@ __webpack_require__.r(__webpack_exports__);
         });
 
         _this2.start = false;
-
-        _this2.$parent.update();
+        _this2.$parent.name = _this2.name;
       });
     },
     restart: function restart() {
@@ -5623,16 +5622,16 @@ var app = new Vue({
     colors: [],
     hidden: false,
     wide: false,
-    name: '',
+    name: '&nbsp;',
     start: true
   },
   computed: {
     getName: function getName() {
-      if (this.$refs.form && this.$refs.form.name) {
+      if (this.$refs.form) {
         return this.$refs.form.name;
       }
 
-      return '&nbsp;';
+      return this.name;
     }
   },
   created: function created() {
@@ -35192,7 +35191,7 @@ var render = function () {
               ],
               staticClass:
                 "form-control input-sm mt-1 bg-white d-inline-block bg-opacity-50",
-              staticStyle: { width: "80%" },
+              staticStyle: { width: "75%" },
               attrs: {
                 id: "btn-input",
                 type: "text",
@@ -35268,7 +35267,7 @@ var render = function () {
     "div",
     {
       staticClass: "chat overflow-scroll",
-      style: "overflow-x: hidden; height: " + (_vm.wide ? 79 : 77) + "vh",
+      style: "overflow-x: hidden; height: " + (_vm.wide ? 79 : 76) + "vh",
       attrs: { id: "scroll" },
     },
     _vm._l(_vm.messages, function (message) {

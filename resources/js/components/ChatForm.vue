@@ -23,7 +23,7 @@
             type="text"
             name="message"
             class="form-control input-sm mt-1 bg-white d-inline-block bg-opacity-50"
-            style="width: 80%"
+            style="width: 75%"
             placeholder="Type your message here..."
             v-model="newMessage"
         @keyup.enter="sendMessage"
@@ -126,7 +126,7 @@ export default {
 
                 this.$cookie.set("name", this.name, { expires: '1Y' });
                 this.start = false;
-                this.$parent.update();
+                this.$parent.name = this.name;
             });
         },
         restart() {

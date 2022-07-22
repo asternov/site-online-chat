@@ -39,16 +39,16 @@ const app = new Vue({
         colors: [],
         hidden: false,
         wide: false,
-        name: '',
+        name: '&nbsp;',
         start: true,
     },
     computed: {
         getName() {
-            if (this.$refs.form && this.$refs.form.name) {
+            if (this.$refs.form) {
                 return this.$refs.form.name
             }
 
-            return '&nbsp;';
+            return this.name;
         }
     },
     created() {
