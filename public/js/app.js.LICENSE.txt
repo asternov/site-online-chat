@@ -18,6 +18,12 @@
  * Released under the MIT License.
  */
 
+/*!
+ * tiny-cookie - A tiny cookie manipulation plugin
+ * https://github.com/Alex1990/tiny-cookie
+ * Under the MIT license | (c) Alex Chao
+ */
+
 /**
  * @license
  * Copyright (c) 2017 The Polymer Project Authors. All rights reserved.

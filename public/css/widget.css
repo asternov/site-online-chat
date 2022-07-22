@@ -5,6 +5,8 @@
     z-index: 999;
     opacity: 1;
     border-radius: 1em;
+    height: 95%;
+    width: 25%;
 }
 
 .widget.open {
