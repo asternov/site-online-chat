@@ -30,6 +30,7 @@
         "fa-icons": "^0.2.0",
         "font-awesome": "^4.7.0",
         "laravel-echo": "^1.11.7",
+        "mdb-ui-kit": "^4.3.0",
         "pusher-js": "^7.1.0-beta",
         "vue-cookie": "^1.1.4",
         "vue-moment": "^4.1.0"
