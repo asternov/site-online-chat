@@ -33,6 +33,9 @@
         "mdb-ui-kit": "^4.3.0",
         "pusher-js": "^7.1.0-beta",
         "vue-cookie": "^1.1.4",
-        "vue-moment": "^4.1.0"
+        "vue-custom-scrollbar": "^1.4.4",
+        "vue-moment": "^4.1.0",
+        "vue-perfect-scrollbar": "^0.2.1",
+        "vuebar": "^0.0.20"
     }
 }

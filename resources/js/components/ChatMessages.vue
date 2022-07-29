@@ -1,5 +1,5 @@
 <template>
-    <div class="chat scrollbar scrollbar-primary" id="scroll" style="overflow-y: scroll; overflow-x: hidden; height: calc(100vh - 11em);">
+    <div class="chat scrollbar scrollbar-primary styled-scrollbars" id="scroll" style="overflow-y: scroll; overflow-x: hidden; height: calc(100vh - 11em);">
         <div class="left clearfix" v-for="message in messages" :key="message.id">
                 <div style="margin-bottom: -5px" v-if="!message.group">
                     <strong :style="'color: #' + message.author.color">
@@ -17,11 +17,25 @@
                     {{ message.message }}
                 </p>
         </div>
-    </div>
+        </div>
 </template>
 
 <script>
+
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+
 export default {
+
+    components: {
+        VuePerfectScrollbar
+    },
+    data() {
+        return {
+            settings: {
+                maxScrollbarLength: 60,
+            }
+        }
+    },
     props: ["messages", "admin", "wide"],
     methods: {
         deleteMessage(id) {
@@ -29,6 +43,9 @@ export default {
                 id: id,
             });
         },
+        scrollHandle(evt) {
+            console.log(evt)
+        }
     },
     mounted() {
         var x = 0;

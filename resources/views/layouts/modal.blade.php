@@ -18,6 +18,12 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') . '?' . random_int(1, 999999) }}" rel="stylesheet">
+    <style>
+        .styled-scrollbars {
+            /* Foreground, Background */
+            scrollbar-color: #999 #333;
+        }
+    </style>
 </head>
 <body style="overflow: hidden; background-color: #292b2c">
     <div id="app">

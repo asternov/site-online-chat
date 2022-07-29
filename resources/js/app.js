@@ -23,6 +23,8 @@ Vue.component('chat-messages', require('./components/ChatMessages.vue').default)
 Vue.component('chat-form', require('./components/ChatForm.vue').default);
 Vue.use(require('vue-moment'));
 Vue.use(require('vue-cookie'));
+import Vuebar from 'vuebar';
+Vue.use(Vuebar);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
