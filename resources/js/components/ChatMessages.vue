@@ -9,11 +9,11 @@
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
 
-                    <span class="d-inline-block text-white mb-2 float-end">
+                    <span class="d-inline-block text-white mb-2 pe-3 float-end">
                         {{ message.created_at | moment("H:mm") }}
                     </span>
                 </div>
-                <p class="d-inline-block text-white mb-2">
+                <p class="d-inline-block text-white mb-2 pe-3">
                     {{ message.message }}
                 </p>
         </div>

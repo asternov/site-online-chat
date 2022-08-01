@@ -35330,7 +35330,9 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "span",
-                { staticClass: "d-inline-block text-white mb-2 float-end" },
+                {
+                  staticClass: "d-inline-block text-white mb-2 pe-3 float-end",
+                },
                 [
                   _vm._v(
                     "\n                    " +
@@ -35342,7 +35344,7 @@ var render = function () {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _c("p", { staticClass: "d-inline-block text-white mb-2" }, [
+        _c("p", { staticClass: "d-inline-block text-white mb-2 pe-3" }, [
           _vm._v(
             "\n                " + _vm._s(message.message) + "\n            "
           ),
