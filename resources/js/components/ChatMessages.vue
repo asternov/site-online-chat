@@ -13,7 +13,7 @@
                         {{ message.created_at | moment("H:mm") }}
                     </span>
                 </div>
-                <p class="d-inline-block text-white mb-2 pe-3">
+                <p class="d-inline-block text-white mb-2 pe-3" style="word-break: break-all">
                     {{ message.message }}
                 </p>
         </div>

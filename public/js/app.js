@@ -35344,11 +35344,18 @@ var render = function () {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _c("p", { staticClass: "d-inline-block text-white mb-2 pe-3" }, [
-          _vm._v(
-            "\n                " + _vm._s(message.message) + "\n            "
-          ),
-        ]),
+        _c(
+          "p",
+          {
+            staticClass: "d-inline-block text-white mb-2 pe-3",
+            staticStyle: { "word-break": "break-all" },
+          },
+          [
+            _vm._v(
+              "\n                " + _vm._s(message.message) + "\n            "
+            ),
+          ]
+        ),
       ])
     }),
     0
