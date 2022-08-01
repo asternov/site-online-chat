@@ -23,6 +23,16 @@
             /* Foreground, Background */
             scrollbar-color: #999 #333;
         }
+        .styled-scrollbars::-webkit-scrollbar {
+            width: 10px; /* Mostly for vertical scrollbars */
+            height: 10px; /* Mostly for horizontal scrollbars */
+        }
+        .styled-scrollbars::-webkit-scrollbar-thumb { /* Foreground */
+            background: #999;
+        }
+        .styled-scrollbars::-webkit-scrollbar-track { /* Background */
+            background: #333;
+        }
     </style>
 </head>
 <body style="overflow: hidden; background-color: #292b2c">
