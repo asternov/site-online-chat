@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('crm_id')->nullable();
             $table->string('color')->nullable();
+            $table->string('hash')->nullable();
             $table->timestamps();
         });
     }
