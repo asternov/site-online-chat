@@ -25,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('authors');
+        Schema::table('authors', function (Blueprint $table) {
+            $table->dropColumn('hash');
+        });
     }
 };
