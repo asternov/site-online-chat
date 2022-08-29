@@ -106,7 +106,7 @@ task('deploy', [
     'artisan:view:cache',   // |
     'artisan:optimize',     // |
     'artisan:migrate',      // |
-    'artisan:db:seed',      // |
+//    'artisan:db:seed',      // |
     'deploy:symlink',
     'deploy:unlock',
     'deploy:cleanup',
