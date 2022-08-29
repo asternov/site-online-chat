@@ -56,6 +56,7 @@ const app = new Vue({
     created() {
         this.fetchMessages();
         this.update();
+        this.updateState();
 
         window.Echo.channel('chat')
             .listen('MessageSent', (e) => {
@@ -145,28 +146,42 @@ const app = new Vue({
         },
         open() {
             this.hidden = false;
-            window.top.postMessage('open', '*')
+            this.changeState('open');
         },
         close() {
-            window.top.postMessage('closed', '*')
+            this.changeState('closed');
         },
         hideChat() {
             this.hidden = true;
-            window.top.postMessage('only-button', '*')
+            this.changeState('only-button');
         },
         expand() {
             this.wide = !this.wide;
-            window.top.postMessage(this.wide ? 'expanded' : 'open', '*')
+            let state = this.wide ? 'expanded' : 'open';
+            this.changeState(state);
+        },
+        changeState(state = 'open') {
+            window.top.postMessage(state, '*')
+
+            this.$cookie.set("state", state, { expires: '1Y' });
         },
         restart(){
             this.$refs.form.restart();
         },
         update() {
+
             var self = this;
 
             setTimeout(() => {
                 self.name = self.$refs.form.name;
             }, 100)
+        },
+        updateState() {
+            let state = this.$cookie.get("state");
+
+            if (state == 'only-button') {
+                this.hideChat()
+            }
         },
     }
 });
