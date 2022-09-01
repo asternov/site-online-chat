@@ -14,12 +14,12 @@ class MessagesController extends Controller
 {
     public function index()
     {
-        setcookie("TestCookie", 'test', time()+3600);
         return view('chat');
     }
 
     public function widget()
     {
+        setcookie("TestCookie", 'test', time()+3600);
         return view('chat-modal');
     }
 
