@@ -30,7 +30,7 @@ class MessagesController extends Controller
 
     public function sendMessage(messageRequest $request)
     {
-        $q = Author::query()->where('name', $request->sender);
+        $q = Author::where('name', $request->sender);
 
         if ($q->count()) {
             $user = $q->first();
