@@ -22,3 +22,6 @@ paste in any web-page this code
     <iframe style="border: 0;" src="https://chat.arjuna.pro/widget" id="chat" height="100%"  width="100%"></iframe>
 </div>
 ```
+
+## Web-chat example
+http://chat.arjuna.pro/widget.html
