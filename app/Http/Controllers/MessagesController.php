@@ -20,7 +20,7 @@ class MessagesController extends Controller
 
     public function widget()
     {
-        return view('chat-modal');
+        return view('chat-widget');
     }
 
     public function fetchMessages()
@@ -30,11 +30,9 @@ class MessagesController extends Controller
 
     public function sendMessage(messageRequest $request)
     {
-        $q = Author::where('name', $request->sender);
+        $user = Author::where('name', $request->sender)->first();
 
-        if ($q->count()) {
-            $user = $q->first();
-        } else {
+        if (empty($user)) {
             $user = Author::query()->create([
                 'name' => $request->sender,
                 'color' => Author::getRandomColor(),
