@@ -30,14 +30,6 @@ class MessagesController extends Controller
 
     public function sendMessage(messageRequest $request)
     {
-        function random_color_part() {
-            return str_pad( dechex( mt_rand( 128, 255 ) ), 2, '0', STR_PAD_LEFT);
-        }
-
-        function random_color() {
-            return random_color_part() . random_color_part() . random_color_part();
-        }
-
         $q = Author::query()->where('name', $request->sender);
 
         if ($q->count()) {
@@ -45,7 +37,7 @@ class MessagesController extends Controller
         } else {
             $user = Author::query()->create([
                 'name' => $request->sender,
-                'color' => random_color(),
+                'color' => Author::getRandomColor(),
             ]);
         }
 
@@ -53,6 +45,7 @@ class MessagesController extends Controller
         $message = $user->messages()->create([
             'message' => $request->message
         ]);
+
         broadcast(new MessageSent($user, $message))->toOthers();
 
         return ['status' => 'Message Sent!', 'color' => $user->color];

@@ -42,4 +42,12 @@ class Author extends Authenticatable
     {
         return $this->hasMany(Message::class);
     }
+
+    public static function randomColorPart() {
+        return str_pad( dechex( mt_rand( 128, 255 ) ), 2, '0', STR_PAD_LEFT);
+    }
+
+    public static function getRandomColor() {
+        return self::randomColorPart() . self::randomColorPart() . self::randomColorPart();
+    }
 }
